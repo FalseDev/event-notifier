@@ -18,7 +18,7 @@ function checkConfigVars(config: { [key: string]: string }) {
 checkConfigVars({ PUSHBULLET_API_KEY, GIST_ID });
 
 async function postNotification(message: string) {
-  let resp = await fetch("https://api.pushbullet.com/v2/pushes", {
+  const resp = await fetch("https://api.pushbullet.com/v2/pushes", {
     method: "POST",
     headers: {
       "Access-Token": PUSHBULLET_API_KEY,
@@ -30,12 +30,15 @@ async function postNotification(message: string) {
       type: "note",
     }),
   });
+  if (resp.status != 200) {
+    throw new Error("Posting to PushBullet failed");
+  }
 }
 
 async function getData(): Promise<{
   [key: string]: [{ name: string; date: string }];
 }> {
-  let resp = await fetch(
+  const resp = await fetch(
     `https://api.github.com/gists/${GIST_ID}`,
     {
       headers: {
@@ -44,19 +47,18 @@ async function getData(): Promise<{
     },
   );
 
-  let fileContent = (await resp.json()).files["events.json"].content;
-  let data = JSON.parse(fileContent);
-  return data;
+  const fileContent = (await resp.json()).files["events.json"].content;
+  return JSON.parse(fileContent);
 }
 
-async function checkUpcomingEvent(request: Request) {
+async function checkUpcomingEvents(request: Request) {
   const { error } = await validateRequest(request, {
     GET: { params: ["days"] },
   });
   if (error) {
     return json(error);
   }
-  let url = new URL(request.url);
+  const url = new URL(request.url);
   const n = +url.searchParams.get("days")!;
   if (Number.isNaN(n)) {
     return json(
@@ -66,20 +68,20 @@ async function checkUpcomingEvent(request: Request) {
       },
     );
   }
-  let msPerDay = 24 * 60 * 60 * 1000;
+  const msPerDay = 24 * 60 * 60 * 1000;
   // Get the date without current time
-  let currentDate = new Date(
+  const currentDate = new Date(
     Math.floor(new Date().getTime() / msPerDay) * msPerDay,
   );
-  let withinDate = new Date(currentDate.getTime() + n * msPerDay);
-  let data = await getData();
+  const withinDate = new Date(currentDate.getTime() + n * msPerDay);
+  const data = await getData();
 
   let message = "";
-  let events = [];
+  const events = [];
   for (const eventName of Object.keys(data)) {
-    let newEvents = data[eventName]
+    const newEvents = data[eventName]
       .map(({ name, date: dateString }) => {
-        let date = new Date(dateString);
+        const date = new Date(dateString);
         date.setUTCFullYear(currentDate.getUTCFullYear());
         // If the event already ended this year, check next year
         if (date < currentDate) {
@@ -99,7 +101,7 @@ async function checkUpcomingEvent(request: Request) {
       message += `${date.toDateString()}: ${eventName} of ${name}\n`;
     });
   }
-  let messageSent = !!message;
+  const messageSent = !!message;
   if (messageSent) {
     await postNotification(message);
   }
@@ -108,7 +110,7 @@ async function checkUpcomingEvent(request: Request) {
 
 serve(
   {
-    "/webhook": checkUpcomingEvent,
+    "/checkUpcomingEvents": checkUpcomingEvents,
   },
   { hostname: "0.0.0.0", port: +PORT },
 );
