@@ -31,7 +31,9 @@ async function postNotification(message: string) {
     }),
   });
   if (resp.status != 200) {
-    throw new Error("Posting to PushBullet failed");
+    throw new Error(
+      `Posting to PushBullet failed, status code: ${resp.status} (${resp.statusText})`,
+    );
   }
 }
 
