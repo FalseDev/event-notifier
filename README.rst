@@ -8,12 +8,12 @@ user through the `PushBullet <https://pushbullet.com>`__ API
 Endpoints
 ---------
 
-+---------------------+------------------------------------+-----------------------------------------+
-| Endpoint            | Params                             |Function                                 |
-+=====================+====================================+=========================================+
-| checkUpcomingEvents | ``days`` - number of days ahead to | Check ``days`` days for upcoming events |
-|                     | check                              | and notify the user                     |
-+---------------------+------------------------------------+-----------------------------------------+
++--------------------------+---------------------------------+---------------------------------------+
+| Endpoint                 | Params                          | Function                              |
++==========================+=================================+=======================================+
+| ``/checkUpcomingEvents`` | ``days`` - number of days ahead | Check ``days`` days for upcoming      |
+|                          | to check                        | events and notify the user            |
++--------------------------+---------------------------------+---------------------------------------+
 
 
 Environment variables
