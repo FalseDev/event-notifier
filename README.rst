@@ -19,15 +19,15 @@ Endpoints
 Environment variables
 ---------------------
 
-+---------------+------------------------------------------------------+
-| Variable      | Description                                          |
-+===============+======================================================+
-| PUSHB         | Your PushBuller API key obtained from settings       |
-| ULLET_API_KEY |                                                      |
-+---------------+------------------------------------------------------+
-| GIST_ID       | The ID of the gist where you have your events.json   |
-|               | file stored                                          |
-+---------------+------------------------------------------------------+
++--------------------+-------------------------------------------------+
+| Variable           | Description                                     |
++====================+=================================================+
+| PUSHBULLET_API_KEY | Your PushBuller API key obtained                |
+|                    | from settings                                   |
++--------------------+-------------------------------------------------+
+| GIST_ID            | The ID of the gist where you have               |
+|                    | your events.json file stored                    |
++--------------------+-------------------------------------------------+
 
 File Format
 -----------
