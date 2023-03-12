@@ -3,7 +3,7 @@ Event Notifier
 
 This is a simple Deno serverless function that checks the next n days
 for upcoming events and sends a message containing said events to the
-user through the `PushBullet <https://pushbullet.com>` API
+user through the `PushBullet <https://pushbullet.com>`__ API
 
 Endpoints
 ---------
